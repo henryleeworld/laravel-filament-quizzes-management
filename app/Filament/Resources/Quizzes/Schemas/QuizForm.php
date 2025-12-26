@@ -31,7 +31,7 @@ class QuizForm
                     ->minValue(1)
                     ->default(10)
                     ->required(),
-                TextInput::make('time_limit')
+                TextInput::make('time_limit_minutes')
                     ->label(__('Time limit'))
                     ->numeric()
                     ->minValue(1)

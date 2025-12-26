@@ -22,7 +22,7 @@ class QuizFactory extends Factory
             'title' => fake()->sentence(4),
             'description' => fake()->paragraph(),
             'question_count' => fake()->numberBetween(10, 50),
-            'time_limit' => $hasTimeLimit ? fake()->numberBetween(1800, 7200) : null,
+            'time_limit_minutes' => $hasTimeLimit ? fake()->numberBetween(30, 120) : null,
             'shuffle_questions' => fake()->boolean(),
             'shuffle_answers' => fake()->boolean(),
             'allow_multiple_attempts' => fake()->boolean(60),
@@ -32,14 +32,14 @@ class QuizFactory extends Factory
     public function timed(): static
     {
         return $this->state(fn (array $attributes) => [
-            'time_limit' => fake()->numberBetween(1800, 7200),
+            'time_limit_minutes' => fake()->numberBetween(30, 120),
         ]);
     }
 
     public function untimed(): static
     {
         return $this->state(fn (array $attributes) => [
-            'time_limit' => null,
+            'time_limit_minutes' => null,
         ]);
     }
 

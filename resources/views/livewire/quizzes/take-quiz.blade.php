@@ -27,7 +27,7 @@
             </flux:text>
         </div>
 
-        @if ($quiz->time_limit)
+        @if ($quiz->time_limit_minutes)
             <div class="flex items-center gap-2">
                 <flux:badge
                     :variant="$remainingSeconds !== null && $remainingSeconds < 60 ? 'solid' : 'outline'"

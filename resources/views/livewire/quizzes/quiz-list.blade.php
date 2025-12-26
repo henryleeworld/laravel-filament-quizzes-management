@@ -26,9 +26,9 @@
                                     {{ $quiz->questions_count }} {{ $quiz->questions_count === 1 ? __('Question') : __('Questions') }}
                                 </flux:badge>
 
-                                @if ($quiz->time_limit)
+                                @if ($quiz->time_limit_minutes)
                                     <flux:badge variant="outline">
-                                        {{ $quiz->time_limit }} {{ __('min') }}
+                                        {{ $quiz->time_limit_minutes }} {{ __('min') }}
                                     </flux:badge>
                                 @endif
 

@@ -25,7 +25,7 @@ class Attempt extends Model
         'score',
         'correct_count',
         'wrong_count',
-        'time_taken',
+        'time_taken_seconds',
     ];
 
     /**
@@ -41,7 +41,7 @@ class Attempt extends Model
             'score' => 'decimal:2',
             'correct_count' => 'integer',
             'wrong_count' => 'integer',
-            'time_taken' => 'integer',
+            'time_taken_seconds' => 'integer',
         ];
     }
 

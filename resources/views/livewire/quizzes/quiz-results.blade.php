@@ -37,9 +37,9 @@
                     </div>
                 </div>
 
-                @if ($attempt->time_taken)
+                @if ($attempt->time_taken_seconds)
                     <flux:badge variant="outline">
-                        {{ __('Time: ') . gmdate('i:s', $attempt->time_taken) }}
+                        {{ __('Time: ') . gmdate('i:s', $attempt->time_taken_seconds) }}
                     </flux:badge>
                 @endif
 

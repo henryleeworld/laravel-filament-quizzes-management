@@ -128,7 +128,7 @@
                                 </td>
                                 <td class="hidden whitespace-nowrap px-6 py-4 md:table-cell">
                                     <flux:text class="text-neutral-600 dark:text-neutral-400">
-                                        {{ $attempt->time_taken ? gmdate('i:s', $attempt->time_taken) : '-' }}
+                                        {{ $attempt->time_taken_seconds ? gmdate('i:s', $attempt->time_taken_seconds) : '-' }}
                                     </flux:text>
                                 </td>
                                 <td class="hidden whitespace-nowrap px-6 py-4 sm:table-cell">

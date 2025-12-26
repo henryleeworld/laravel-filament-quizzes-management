@@ -20,7 +20,7 @@ class AttemptFactory extends Factory
     {
         $startedAt = fake()->dateTimeBetween('-30 days', 'now');
         $submittedAt = fake()->dateTimeBetween($startedAt, 'now');
-        $timeTaken = $submittedAt->getTimestamp() - $startedAt->getTimestamp();
+        $timeTakenSeconds = $submittedAt->getTimestamp() - $startedAt->getTimestamp();
         $score = fake()->randomFloat(2, 50, 100);
         $totalQuestions = 20;
         $correctCount = (int) round(($score / 100) * $totalQuestions);
@@ -34,7 +34,7 @@ class AttemptFactory extends Factory
             'score' => $score,
             'correct_count' => $correctCount,
             'wrong_count' => $wrongCount,
-            'time_taken' => $timeTaken,
+            'time_taken_seconds' => $timeTakenSeconds,
         ];
     }
 
@@ -42,7 +42,7 @@ class AttemptFactory extends Factory
     {
         $startedAt = fake()->dateTimeBetween('-30 days', 'now');
         $submittedAt = fake()->dateTimeBetween($startedAt, 'now');
-        $timeTaken = $submittedAt->getTimestamp() - $startedAt->getTimestamp();
+        $timeTakenSeconds = $submittedAt->getTimestamp() - $startedAt->getTimestamp();
         $score = fake()->randomFloat(2, 50, 100);
         $totalQuestions = 20;
         $correctCount = (int) round(($score / 100) * $totalQuestions);
@@ -54,7 +54,7 @@ class AttemptFactory extends Factory
             'score' => $score,
             'correct_count' => $correctCount,
             'wrong_count' => $wrongCount,
-            'time_taken' => $timeTaken,
+            'time_taken_seconds' => $timeTakenSeconds,
         ]);
     }
 
@@ -65,7 +65,7 @@ class AttemptFactory extends Factory
             'score' => null,
             'correct_count' => null,
             'wrong_count' => null,
-            'time_taken' => null,
+            'time_taken_seconds' => null,
         ]);
     }
 }

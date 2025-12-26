@@ -21,7 +21,7 @@ class Quiz extends Model
         'title',
         'description',
         'question_count',
-        'time_limit',
+        'time_limit_minutes',
         'shuffle_questions',
         'shuffle_answers',
         'allow_multiple_attempts',
@@ -36,7 +36,7 @@ class Quiz extends Model
     {
         return [
             'question_count' => 'integer',
-            'time_limit' => 'integer',
+            'time_limit_minutes' => 'integer',
             'shuffle_questions' => 'boolean',
             'shuffle_answers' => 'boolean',
             'allow_multiple_attempts' => 'boolean',

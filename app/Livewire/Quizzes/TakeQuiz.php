@@ -55,9 +55,9 @@ class TakeQuiz extends Component
 
         $this->questions = $this->quizService->prepareQuizQuestions($quiz);
 
-        if ($quiz->time_limit) {
+        if ($quiz->time_limit_minutes) {
             $elapsedSeconds = $this->attempt->started_at->diffInSeconds(now());
-            $totalSeconds = $quiz->time_limit * 60;
+            $totalSeconds = $quiz->time_limit_minutes * 60;
             $this->remainingSeconds = max(0, $totalSeconds - $elapsedSeconds);
 
             if ($this->remainingSeconds === 0) {

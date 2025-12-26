@@ -137,7 +137,7 @@ class ExamPlatformSeeder extends Seeder
                 'title' => fake()->sentence(4),
                 'description' => fake()->paragraph(),
                 'question_count' => $questionCount,
-                'time_limit' => $i <= 6 ? fake()->numberBetween(1800, 3600) : null,
+                'time_limit_minutes' => $i <= 6 ? fake()->numberBetween(30, 60) : null,
                 'shuffle_questions' => fake()->boolean(),
                 'shuffle_answers' => fake()->boolean(),
                 'allow_multiple_attempts' => fake()->boolean(60),
@@ -179,7 +179,7 @@ class ExamPlatformSeeder extends Seeder
                 'score' => round($score, 2),
                 'correct_count' => $correctAnswers,
                 'wrong_count' => $wrongAnswers,
-                'time_taken' => $timeTaken,
+                'time_taken_seconds' => $timeTaken,
             ]);
 
             foreach ($quizQuestions as $index => $question) {
@@ -221,7 +221,7 @@ class ExamPlatformSeeder extends Seeder
                 'score' => null,
                 'correct_count' => null,
                 'wrong_count' => null,
-                'time_taken' => null,
+                'time_taken_seconds' => null,
             ]);
         }
     }

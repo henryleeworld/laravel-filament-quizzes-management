@@ -25,7 +25,7 @@ class QuizzesTable
                     ->label(__('Questions'))
                     ->sortable()
                     ->alignCenter(),
-                TextColumn::make('time_limit')
+                TextColumn::make('time_limit_minutes')
                     ->label(__('Time limit'))
                     ->suffix(' ' . __('min'))
                     ->sortable()
