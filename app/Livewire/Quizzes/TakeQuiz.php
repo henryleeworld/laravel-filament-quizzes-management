@@ -94,6 +94,17 @@ class TakeQuiz extends Component
         return $this->quizService->shuffleQuestionOptions($this->quiz, $options);
     }
 
+    private function getFirstUnansweredQuestionIndex(): ?int
+    {
+        foreach ($this->questions as $index => $question) {
+            if (! isset($this->answers[$question->id])) {
+                return $index;
+            }
+        }
+
+        return null;
+    }
+
     public function updatedAnswers($value, $questionId): void
     {
         try {
@@ -111,7 +122,19 @@ class TakeQuiz extends Component
     {
         if ($this->currentQuestionIndex < $this->questions->count() - 1) {
             $this->currentQuestionIndex++;
+
+            return;
         }
+
+        $unansweredIndex = $this->getFirstUnansweredQuestionIndex();
+
+        if ($unansweredIndex === null) {
+            $this->submitQuiz();
+
+            return;
+        }
+
+        $this->currentQuestionIndex = $unansweredIndex;
     }
 
     public function previousQuestion(): void

@@ -74,7 +74,7 @@ class TakeQuizTest extends TestCase
         );
     }
 
-    public function test_user_cannot_attempt_quiz_when_retakes_not_allowed_and_completed(): void
+    public function test_user_cannot_attempt_quiz_when_retakes_are_not_allowed_and_they_completed_it(): void
     {
         $user = User::factory()->create(['email' => 'student@example.com']);
         $quiz = Quiz::factory()->create(['allow_multiple_attempts' => false]);
@@ -191,18 +191,18 @@ class TakeQuizTest extends TestCase
             ->assertSet('currentQuestionIndex', 1);
     }
 
-    public function test_cannot_navigate_beyond_question_bounds(): void
+    public function test_cannot_navigate_before_first_question(): void
     {
         $user = User::factory()->create(['email' => 'student@example.com']);
         $quiz = Quiz::factory()->create(['allow_multiple_attempts' => true]);
-
         $questions = Question::factory()->count(3)->create();
+
         $quiz->questions()->attach($questions->pluck('id'));
 
         foreach ($questions as $question) {
-            QuestionOption::factory()->count(4)->create([
-                'question_id' => $question->id,
-            ]);
+            QuestionOption::factory()
+                ->count(4)
+                ->create(['question_id' => $question->id]);
         }
 
         $this->actingAs($user);
@@ -210,10 +210,103 @@ class TakeQuizTest extends TestCase
         Livewire::test(TakeQuiz::class, ['quiz' => $quiz])
             ->set('currentQuestionIndex', 0)
             ->call('previousQuestion')
-            ->assertSet('currentQuestionIndex', 0)
+            ->assertSet('currentQuestionIndex', 0);
+    }
+
+    public function test_next_question_on_last_question_with_all_answered_submits_quiz(): void
+    {
+        $user = User::factory()->create(['email' => 'student@example.com']);
+        $quiz = Quiz::factory()->create(['allow_multiple_attempts' => true]);
+
+        $question1 = Question::factory()->create();
+        $question2 = Question::factory()->create();
+        $quiz->questions()->attach([$question1->id, $question2->id]);
+
+        $option1 = QuestionOption::factory()->create([
+            'question_id' => $question1->id,
+            'is_correct' => true,
+        ]);
+        $option2 = QuestionOption::factory()->create([
+            'question_id' => $question2->id,
+            'is_correct' => true,
+        ]);
+
+        QuestionOption::factory()->count(3)->create([
+            'question_id' => $question1->id,
+            'is_correct' => false,
+        ]);
+        QuestionOption::factory()->count(3)->create([
+            'question_id' => $question2->id,
+            'is_correct' => false,
+        ]);
+
+        $this->actingAs($user);
+
+        $component = Livewire::test(TakeQuiz::class, ['quiz' => $quiz]);
+        $questions = $component->get('questions');
+
+        $component
+            ->set("answers.{$questions[0]->id}", $option1->id)
+            ->set('currentQuestionIndex', 1)
+            ->set("answers.{$questions[1]->id}", $option2->id)
+            ->call('nextQuestion')
+            ->assertRedirect();
+
+        $attempt = Attempt::where('user_id', $user->id)
+            ->where('quiz_id', $quiz->id)
+            ->first();
+
+        $this->assertNotNull($attempt);
+        $this->assertNotNull($attempt->submitted_at);
+    }
+
+    public function test_next_question_on_last_question_with_unanswered_redirects_to_first_unanswered(): void
+    {
+        $user = User::factory()->create(['email' => 'student@example.com']);
+        $quiz = Quiz::factory()->create([
+            'allow_multiple_attempts' => true,
+            'shuffle_questions' => false,
+        ]);
+
+        $question1 = Question::factory()->create();
+        $question2 = Question::factory()->create();
+        $question3 = Question::factory()->create();
+        $quiz->questions()->attach([$question1->id, $question2->id, $question3->id]);
+
+        $option2 = QuestionOption::factory()->create(['question_id' => $question2->id]);
+        $option3 = QuestionOption::factory()->create(['question_id' => $question3->id]);
+
+        QuestionOption::factory()->count(3)->create(['question_id' => $question1->id]);
+        QuestionOption::factory()->count(3)->create(['question_id' => $question2->id]);
+        QuestionOption::factory()->count(3)->create(['question_id' => $question3->id]);
+
+        $this->actingAs($user);
+
+        $component = Livewire::test(TakeQuiz::class, ['quiz' => $quiz]);
+        $questions = $component->get('questions');
+        $attempt = $component->get('attempt');
+
+        AttemptAnswer::create([
+            'attempt_id' => $attempt->id,
+            'question_id' => $questions[1]->id,
+            'selected_option_id' => $option2->id,
+        ]);
+        AttemptAnswer::create([
+            'attempt_id' => $attempt->id,
+            'question_id' => $questions[2]->id,
+            'selected_option_id' => $option3->id,
+        ]);
+
+        $component
+            ->set('answers', [
+                $questions[1]->id => $option2->id,
+                $questions[2]->id => $option3->id,
+            ])
             ->set('currentQuestionIndex', 2)
             ->call('nextQuestion')
-            ->assertSet('currentQuestionIndex', 2);
+            ->assertSet('currentQuestionIndex', 0);
+
+        $this->assertNull($attempt->fresh()->submitted_at);
     }
 
     public function test_submit_quiz_calculates_correct_score(): void

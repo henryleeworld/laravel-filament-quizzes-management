@@ -14,13 +14,13 @@ use Tests\TestCase;
 
 class DashboardTest extends TestCase
 {
-    public function test_guests_are_redirected_to_login_page()
+    public function test_guests_are_redirected_to_login_page(): void
     {
         $this->get('/dashboard')
             ->assertRedirect('/login');
     }
 
-    public function test_authenticated_users_can_visit_dashboard()
+    public function test_authenticated_users_can_visit_dashboard(): void
     {
         $user = User::factory()->create(['email' => 'student@example.com']);
 
@@ -29,7 +29,7 @@ class DashboardTest extends TestCase
             ->assertOk();
     }
 
-    public function test_dashboard_displays_zero_stats_when_user_has_no_attempts()
+    public function test_dashboard_displays_zero_stats_when_user_has_no_attempts(): void
     {
         $user = User::factory()->create(['email' => 'student@example.com']);
         $this->actingAs($user);
@@ -43,7 +43,7 @@ class DashboardTest extends TestCase
             ->assertSee(__('No attempts yet'));
     }
 
-    public function test_dashboard_calculates_stats_correctly_with_attempts()
+    public function test_dashboard_calculates_stats_correctly_with_attempts(): void
     {
         $user = User::factory()->create(['email' => 'student@example.com']);
         $quiz = Quiz::factory()->create();
@@ -74,7 +74,7 @@ class DashboardTest extends TestCase
             ->assertSee('50%');
     }
 
-    public function test_dashboard_only_shows_completed_attempts()
+    public function test_dashboard_only_shows_completed_attempts(): void
     {
         $user = User::factory()->create(['email' => 'student@example.com']);
         $quiz = Quiz::factory()->create();
@@ -99,7 +99,7 @@ class DashboardTest extends TestCase
             ->assertSeeInOrder([__('Total attempts'), '1']);
     }
 
-    public function test_dashboard_does_not_show_other_users_attempts()
+    public function test_dashboard_does_not_show_other_users_attempts(): void
     {
         $user = User::factory()->create(['email' => 'student@example.com']);
         $otherUser = User::factory()->create(['email' => 'other@example.com']);
@@ -119,7 +119,7 @@ class DashboardTest extends TestCase
             ->assertDontSee('95%');
     }
 
-    public function test_attempt_history_displays_quiz_title_and_score()
+    public function test_attempt_history_displays_quiz_title_and_score(): void
     {
         $user = User::factory()->create(['email' => 'student@example.com']);
         $quiz = Quiz::factory()->create(['title' => 'Laravel Fundamentals']);
@@ -144,7 +144,7 @@ class DashboardTest extends TestCase
             ->assertSee(__('Passed'));
     }
 
-    public function test_attempt_history_shows_failed_badge_for_low_scores()
+    public function test_attempt_history_shows_failed_badge_for_low_scores(): void
     {
         $user = User::factory()->create(['email' => 'student@example.com']);
         $quiz = Quiz::factory()->create(['title' => 'Difficult Quiz']);
@@ -164,7 +164,7 @@ class DashboardTest extends TestCase
             ->assertSee(__('Failed'));
     }
 
-    public function test_empty_state_shows_browse_quizzes_button()
+    public function test_empty_state_shows_browse_quizzes_button(): void
     {
         $user = User::factory()->create(['email' => 'student@example.com']);
         $this->actingAs($user);
@@ -174,7 +174,7 @@ class DashboardTest extends TestCase
             ->assertSee(__('Browse quizzes'));
     }
 
-    public function test_category_performance_is_displayed_correctly()
+    public function test_category_performance_is_displayed_correctly(): void
     {
         $user = User::factory()->create(['email' => 'student@example.com']);
         $category = Category::factory()->create(['name' => 'PHP Basics']);
@@ -211,7 +211,7 @@ class DashboardTest extends TestCase
             ->assertSee('50%');
     }
 
-    public function test_category_performance_is_hidden_when_no_answers_exist()
+    public function test_category_performance_is_hidden_when_no_answers_exist(): void
     {
         $user = User::factory()->create(['email' => 'student@example.com']);
         $this->actingAs($user);
@@ -220,7 +220,7 @@ class DashboardTest extends TestCase
             ->assertDontSee(__('Category performance'));
     }
 
-    public function test_pass_rate_calculates_correctly_with_mixed_results()
+    public function test_pass_rate_calculates_correctly_with_mixed_results(): void
     {
         $user = User::factory()->create(['email' => 'student@example.com']);
         $quiz = Quiz::factory()->create();
@@ -236,7 +236,7 @@ class DashboardTest extends TestCase
             ->assertSee('50%');
     }
 
-    public function test_attempt_history_links_to_detailed_results_page()
+    public function test_attempt_history_links_to_detailed_results_page(): void
     {
         $user = User::factory()->create(['email' => 'student@example.com']);
         $quiz = Quiz::factory()->create(['title' => 'Test Quiz']);

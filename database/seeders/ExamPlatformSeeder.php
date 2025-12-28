@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Enums\Difficulty;
 use App\Models\Attempt;
 use App\Models\AttemptAnswer;
 use App\Models\Category;

@@ -22,7 +22,7 @@ class QuizServiceTest extends TestCase
         $this->service = new QuizService();
     }
 
-    public function test_can_user_attempt_quiz_returns_true_when_multiple_attempts_allowed()
+    public function test_can_user_attempt_quiz_returns_true_when_multiple_attempts_allowed(): void
     {
         $user = User::factory()->create();
         $quiz = Quiz::factory()->create(['allow_multiple_attempts' => true]);
@@ -39,7 +39,7 @@ class QuizServiceTest extends TestCase
         );
     }
 
-    public function test_can_user_attempt_quiz_returns_true_when_no_completed_attempts()
+    public function test_can_user_attempt_quiz_returns_true_when_no_completed_attempts(): void
     {
         $user = User::factory()->create();
         $quiz = Quiz::factory()->create(['allow_multiple_attempts' => false]);
@@ -49,7 +49,7 @@ class QuizServiceTest extends TestCase
         );
     }
 
-    public function test_can_user_attempt_quiz_returns_false_when_completed_and_no_retakes()
+    public function test_can_user_attempt_quiz_returns_false_when_completed_and_no_retakes(): void
     {
         $user = User::factory()->create();
         $quiz = Quiz::factory()->create(['allow_multiple_attempts' => false]);
@@ -65,7 +65,7 @@ class QuizServiceTest extends TestCase
         );
     }
 
-    public function test_start_quiz_creates_new_attempt()
+    public function test_start_quiz_creates_new_attempt(): void
     {
         $user = User::factory()->create();
         $quiz = Quiz::factory()->create(['allow_multiple_attempts' => true]);
@@ -84,7 +84,7 @@ class QuizServiceTest extends TestCase
         ]);
     }
 
-    public function test_start_quiz_throws_exception_when_not_allowed()
+    public function test_start_quiz_throws_exception_when_not_allowed(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('User is not allowed to attempt this quiz.');
@@ -101,7 +101,7 @@ class QuizServiceTest extends TestCase
         $this->service->startQuiz($user, $quiz);
     }
 
-    public function test_get_in_progress_attempt_returns_attempt()
+    public function test_get_in_progress_attempt_returns_attempt(): void
     {
         $user = User::factory()->create();
         $quiz = Quiz::factory()->create();
@@ -118,7 +118,7 @@ class QuizServiceTest extends TestCase
         $this->assertEquals($attempt->id, $result->id);
     }
 
-    public function test_prepare_quiz_questions_respects_shuffle_setting()
+    public function test_prepare_quiz_questions_respects_shuffle_setting(): void
     {
         $quiz = Quiz::factory()->create(['shuffle_questions' => false]);
         $questions = Question::factory()->count(5)->create();
@@ -132,7 +132,7 @@ class QuizServiceTest extends TestCase
         );
     }
 
-    public function test_shuffle_question_options_removes_is_correct_flag()
+    public function test_shuffle_question_options_removes_is_correct_flag(): void
     {
         $quiz = Quiz::factory()->create(['shuffle_answers' => false]);
         $question = Question::factory()->create();
@@ -150,7 +150,7 @@ class QuizServiceTest extends TestCase
         }
     }
 
-    public function test_save_answer_creates_new_record()
+    public function test_save_answer_creates_new_record(): void
     {
         $quiz = Quiz::factory()->create();
         $question = Question::factory()->create();
@@ -171,7 +171,7 @@ class QuizServiceTest extends TestCase
         ]);
     }
 
-    public function test_submit_quiz_updates_score_and_counts()
+    public function test_submit_quiz_updates_score_and_counts(): void
     {
         $quiz = Quiz::factory()->create(['time_limit_minutes' => null]);
         $question = Question::factory()->create();
@@ -204,7 +204,7 @@ class QuizServiceTest extends TestCase
         $this->assertEquals(0, $attempt->wrong_count);
     }
 
-    public function test_calculate_score_updates_is_correct_field()
+    public function test_calculate_score_updates_is_correct_field(): void
     {
         $quiz = Quiz::factory()->create();
         $question = Question::factory()->create();
